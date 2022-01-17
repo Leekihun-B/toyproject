@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="MsgTranMapper">
+	<!-- Beans 클래스의 객체이름(id)과 클래스이름(type)을 명시한다. -->
+    <resultMap id="msgTranMap" type="com.java.spring.model.MsgTran">
+        <!-- Beans의 멤버변수(property)이름과 대상 테이블의 컬럼(column)을 연결한다. -->
+        <result property="Msg_id" column="Msg_id" />
+        <result property="Phone_No" column="Phone_No" />
+        <result property="Callback_No" column="Callback_No" />
+        <result property="Status" column="Status" />
+        <result property="Msg_Type" column="Msg_Type" />
+        <result property="Send_Time" column="Send_Time" />
+        <result property="Save_Time" column="Save_Time" />
+        <result property="Message" column="Message" />
+    </resultMap>
+    <!-- 단일행 조회를 위한 기능 정의 -->
+    <select id="selectItem" parameterType="com.java.spring.model.MsgTran" resultMap="msgTranMap">
+        SELECT Msg_id, Phone_No, Callback_No, Status, Msg_Type, Send_Time, Save_Time, Message FROM msg_tran WHERE Msg_id=#{Msg_id};
+    </select>
+	
+	<!-- 다중행 조회를 위한 기능 정의 -->
+    <select id="selectList" parameterType="com.java.spring.model.MsgTran" resultMap="msgTranMap">
+        SELECT Msg_id, Phone_No, Callback_No, Status, Msg_Type, Send_Time, Save_Time, Message FROM msg_tran
+        <where>
+            <if test="Phone_No != null and Phone_No != ''">
+                Phone_No LIKE concat('%', #{Phone_No}, '%')
+            </if>
+            <if test="Callback_No != null and Callback_No != ''">
+                OR Callback_No LIKE concat('%', #{Callback_No}, '%')
+            </if>
+            <if test="Status != null and Status != ''">
+                OR Status LIKE concat('%', #{Status}, '%')
+            </if>
+            <if test="Msg_Type != null and Msg_Type != ''">
+                OR Msg_Type LIKE concat('%', #{Msg_Type}, '%')
+            </if>
+            <if test="Send_Time != null and Send_Time != ''">
+                OR Send_Time LIKE concat('%', #{Send_Time}, '%')
+            </if>
+            <if test="Save_Time != null and Save_Time != ''">
+                OR Save_Time LIKE concat('%', #{Save_Time}, '%')
+            </if>
+            <if test="Message != null and Message != ''">
+                OR Message LIKE concat('%', #{Message}, '%')
+            </if>
+        </where>
+        ORDER BY Msg_id DESC;
+    </select>
+	<!-- 데이터 저장을 위한 기능 정의 -->
+	<insert id="insertItem" parameterType="com.java.spring.model.MsgTran" useGeneratedKeys="true" keyProperty="Msg_id">
+	INSERT INTO msg_tran (Phone_No, Callback_No, Status, Msg_Type, Send_Time, Save_Time, Message) VALUES (#{Phone_No}, #{Callback_No}, #{Status}, #{Msg_Type}, #{Send_Time}, #{Save_Time}, #{Message});
+	</insert>
+	
+	<!-- 데이터 삭제를 위한 기능 정의 -->
+	<delete id="deleteItem" parameterType="com.java.spring.model.MsgTran">
+		DELETE FROM msg_tran WHERE Msg_id=#{Msg_id};
+	</delete>
+	
+	<!-- 데이터 갱신을 위한 기능 정의 -->
+	<update id="updateItem" parameterType="com.java.spring.model.MsgTran">
+		UPDATE msg_tran SET Phone_No=#{Phone_No}, Callback_No=#{Callback_No}, Status=#{Status}, Msg_Type=#{Msg_Type}, Send_Time=#{Send_Time}, Save_Time=#{Save_Time}, Message=#{Message} WHERE Msg_id=#{Msg_id};
+	</update>
+	
+	<!-- 데이터 수 조회하기 -->
+	<select id="selectCountAll" parameterType="com.java.spring.model.MsgTran" resultType="int">
+        SELECT COUNT(*) FROM msg_tran
+        <where>
+            <if test="Phone_No != null and Phone_No != ''">
+                Phone_No LIKE concat('%', #{Phone_No}, '%')
+            </if>
+            <if test="Callback_No != null and Callback_No != ''">
+                OR Callback_No LIKE concat('%', #{Callback_No}, '%')
+            </if>
+            <if test="Status != null and Status != ''">
+                OR Status LIKE concat('%', #{Status}, '%')
+            </if>
+            <if test="Msg_Type != null and Msg_Type != ''">
+                OR Msg_Type LIKE concat('%', #{Msg_Type}, '%')
+            </if>
+            <if test="Send_Time != null and Send_Time != ''">
+                OR Send_Time LIKE concat('%', #{Send_Time}, '%')
+            </if>
+            <if test="Save_Time != null and Save_Time != ''">
+                OR Save_Time LIKE concat('%', #{Save_Time}, '%')
+            </if>
+            <if test="Message != null and Message != ''">
+                OR Message LIKE concat('%', #{Message}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>
