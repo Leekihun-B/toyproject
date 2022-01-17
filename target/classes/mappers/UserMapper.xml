@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="UserMapper">
+	<!-- Beans 클래스의 객체이름(id)과 클래스이름(type)을 명시한다. -->
+    <resultMap id="userMap" type="com.java.spring.model.User">
+        <!-- Beans의 멤버변수(property)이름과 대상 테이블의 컬럼(column)을 연결한다. -->
+        <result property="id" column="id" />
+        <result property="user_id" column="user_id" />
+        <result property="user_pw" column="user_pw" />
+        <result property="user_name" column="user_name" />
+        <result property="user_nicname" column="user_nicname" />
+        <result property="is_out" column="is_out" />
+        <result property="reg_date" column="reg_date" />
+        <result property="last_date" column="last_date" />
+        <result property="login_date" column="login_date" />
+    </resultMap>
+    <!-- 단일행 조회를 위한 기능 정의 -->
+    <select id="selectItem" parameterType="com.java.spring.model.User" resultMap="userMap">
+        SELECT id, user_id, user_pw, user_name, user_nicname, is_out, reg_date, last_date, login_date FROM user
+        <where>
+            <if test="id != null and id != ''">
+                id LIKE concat('%', #{id}, '%')
+            </if>
+            <if test="user_id != null and user_id != ''">
+                AND user_id LIKE concat('%', #{user_id}, '%')
+            </if>
+            <if test="user_pw != null and user_pw != ''">
+                AND user_pw LIKE concat('%', md5(#{user_pw}), '%')
+            </if>
+            <if test="user_name != null and user_name != ''">
+                AND user_name LIKE concat('%', #{user_name}, '%')
+            </if>
+            <if test="user_nicname != null and user_nicname != ''">
+                AND user_nicname LIKE concat('%', #{user_nicname}, '%')
+            </if>
+            <if test="is_out != null and is_out != ''">
+                AND is_out LIKE concat('%', #{is_out}, '%')
+            </if>
+            <if test="reg_date != null and reg_date != ''">
+                AND reg_date LIKE concat('%', #{reg_date}, '%')
+            </if>
+            <if test="last_date != null and last_date != ''">
+                AND last_date LIKE concat('%', #{last_date}, '%')
+            </if>
+            <if test="login_date != null and login_date != ''">
+                AND login_date LIKE concat('%', #{login_date}, '%')
+            </if>
+        </where>
+    </select>
+	
+	<!-- 다중행 조회를 위한 기능 정의 -->
+    <select id="selectList" parameterType="com.java.spring.model.User" resultMap="userMap">
+        SELECT id, user_id, user_pw, user_name, user_nicname, is_out, reg_date, last_date, login_date FROM user
+        <where>
+            <if test="id != null and id != ''">
+                id LIKE concat('%', #{id}, '%')
+            </if>
+            <if test="user_id != null and user_id != ''">
+                OR user_id LIKE concat('%', #{user_id}, '%')
+            </if>
+            <if test="user_name != null and user_name != ''">
+                OR user_name LIKE concat('%', #{user_name}, '%')
+            </if>
+            <if test="user_nicname != null and user_nicname != ''">
+                OR user_nicname LIKE concat('%', #{user_nicname}, '%')
+            </if>
+            <if test="is_out != null and is_out != ''">
+                OR is_out LIKE concat('%', #{is_out}, '%')
+            </if>
+            <if test="reg_date != null and reg_date != ''">
+                OR reg_date LIKE concat('%', #{reg_date}, '%')
+            </if>
+            <if test="last_date != null and last_date != ''">
+                OR last_date LIKE concat('%', #{last_date}, '%')
+            </if>
+            <if test="login_date != null and login_date != ''">
+                OR login_date LIKE concat('%', #{login_date}, '%')
+            </if>
+        </where>
+        ORDER BY id DESC;
+    </select>
+	<!-- 데이터 저장을 위한 기능 정의 -->
+	<insert id="insertItem" parameterType="com.java.spring.model.User" useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO department (user_id, user_pw, user_name, user_nicname, is_out, reg_date, last_date, login_date) VALUES (#{user_id}, #{user_pw}, #{user_name}, #{user_nicname}, #{is_out}, #{reg_date}, #{last_date}, #{login_date});
+	</insert>
+	
+	<!-- 데이터 삭제를 위한 기능 정의 -->
+	<delete id="deleteItem" parameterType="com.java.spring.model.User">
+		DELETE FROM user WHERE id=#{id};
+	</delete>
+	
+	<!-- 데이터 갱신을 위한 기능 정의 -->
+	<update id="updateItem" parameterType="com.java.spring.model.User">
+		UPDATE user SET user_id=#{user_id}, user_pw=#{user_pw}, user_name=#{user_name}, user_nicname=#{user_nicname}, is_out=#{is_out}, reg_date=#{reg_date}, last_date=#{last_date}, login_date=#{login_date} WHERE id=#{id};
+	</update>
+	
+	<!-- 데이터 수 조회하기 -->
+	<select id="selectCountAll" parameterType="com.java.spring.model.User" resultType="int">
+        SELECT COUNT(*) FROM user
+        <where>
+            <if test="id != null and id != ''">
+                id LIKE concat('%', #{id}, '%')
+            </if>
+            <if test="user_id != null and user_id != ''">
+                OR user_id LIKE concat('%', #{user_id}, '%')
+            </if>
+            <if test="user_name != null and user_name != ''">
+                OR user_name LIKE concat('%', #{user_name}, '%')
+            </if>
+            <if test="user_nicname != null and user_nicname != ''">
+                OR user_nicname LIKE concat('%', #{user_nicname}, '%')
+            </if>
+            <if test="is_out != null and is_out != ''">
+                OR is_out LIKE concat('%', #{is_out}, '%')
+            </if>
+            <if test="reg_date != null and reg_date != ''">
+                OR reg_date LIKE concat('%', #{reg_date}, '%')
+            </if>
+            <if test="last_date != null and last_date != ''">
+                OR last_date LIKE concat('%', #{last_date}, '%')
+            </if>
+            <if test="login_date != null and login_date != ''">
+                OR login_date LIKE concat('%', #{login_date}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>
